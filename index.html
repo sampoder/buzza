@@ -4,13 +4,15 @@
 
     <title>Buzza</title>
 
+    <link rel="icon" href="/icon.png">
+
     <script src="/socket.io/socket.io.js"></script>
 
     <link rel="stylesheet" href="/styles.css" />
 
   </head>
 
-  <body>
+  <div id ="everything">
 
   <div id="active">
 
@@ -40,48 +42,31 @@
 
   <div id="setup">
 
-    <h1 style="margin-block-start: 0em; text-align: center">
-      Buzza
-    </h1>
-
     <input type="text" id="name" placeholder="Username" />
-
-    <br />
-    <br />
-
+    <br>
     <input type="text" id="room" placeholder="Room Name" />
-
-    <br />
-    <br />
-
+    <br>
     <button
       type="button"
+      class="start-button"
       id="submit-button"
       onclick="joinGame()"
       style="width:230px;"
     >
       Join Game
     </button>
-
-    <br />
-    <br />
-
+    <br>
     <button
       type="button"
+      class="start-button"
       id="teacher-button"
       onclick="teacherSetup()"
       style="width:230px;"
     >
       New Game
     </button>
-
-    <br />
-    <br />
-
-    <p style="margin-block-end: 0em; text-align: center; font-size: 10px">
-      Made by Sam Poder
-    </p>
     
+  </div>
   </div>
 
   <script>
@@ -109,17 +94,9 @@
       console.log(msg);
       if (teacher == false) {
         document.getElementById("buzz").disabled = false;
+        document.getElementById("unbuzz").disabled = true;
       }
-      document.getElementById("unbuzz").disabled = true;
-      document.getElementById("info-text").innerText =
-        msg + " has disengaged the buzzer.";
-    });
-    socket.on("unbuzz", function(msg) {
-      console.log(msg);
-      if (teacher == false) {
-        document.getElementById("buzz").disabled = false;
-      }
-      document.getElementById("unbuzz").disabled = true;
+      
       document.getElementById("info-text").innerText =
         msg + " has disengaged the buzzer.";
     });
@@ -139,6 +116,7 @@
 
     function teacherSetup() {
       document.getElementById("buzz").innerText = "loading";
+      document.querySelector("#buzz:disabled").style.color="black"
       var request = new XMLHttpRequest();
       var name = "unknown";
       request.open("GET", "https://friendly-words.glitch.me/word-pairs", true);
@@ -149,9 +127,9 @@
         socket.emit("join-room", name);
         connectedRoom = name;
         document.getElementById("buzz").innerText = name;
-        document.getElementById("buzz").style.color = "black";
+        document.querySelectorAll("button:disabled").style.color = "black";
         document.getElementById("buzz").disabled = true;
-        document.getElementById("unbuzz").disabled = true;
+        document.getElementById("unbuzz").disabled = false;
       };
 
       request.send();
@@ -159,7 +137,7 @@
       username = "The teacher";
       socket.emit("join-room", connectedRoom);
       document.getElementById("buzz").disabled = true;
-      document.getElementById("unbuzz").disabled = true;
+      document.getElementById("unbuzz").disabled = false;
       document.getElementById("setup").style.display = "none";
       document.getElementById("active").style.display = "block";
       document.getElementById("info-text").innerText = "Join the game!";
@@ -168,5 +146,4 @@
       console.log(teacher);
     }
   </script>
-  <body></body>
 </html>
