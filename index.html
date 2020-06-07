@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Buzza</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <link rel="stylesheet" href="/styles.css" />
+
+  </head>
+
+  <body>
+
+  <div id="active">
+
+    <div id="info-panel" style="">
+
+      <div id="info-text" style="  padding: 3.5vh">Welcome to the Game!</div>
+
+    </div>
+
+    <button
+      class="block"
+      id="buzz"
+      onclick="socket.emit('buzz', [connectedRoom, username]); document.getElementById('unbuzz').disabled = false; document.getElementById('buzz').disabled = true;"
+    >
+      Buzz
+    </button>
+    
+    <button
+      class="block2"
+      id="unbuzz"
+      onclick="socket.emit('unbuzz', [connectedRoom, username]); "
+    >
+      Disengage Buzzer
+    </button>
+
+  </div>
+
+  <div id="setup">
+
+    <h1 style="margin-block-start: 0em; text-align: center">
+      Buzza
+    </h1>
+
+    <input type="text" id="name" placeholder="Username" />
+
+    <br />
+    <br />
+
+    <input type="text" id="room" placeholder="Room Name" />
+
+    <br />
+    <br />
+
+    <button
+      type="button"
+      id="submit-button"
+      onclick="joinGame()"
+      style="width:230px;"
+    >
+      Join Game
+    </button>
+
+    <br />
+    <br />
+
+    <button
+      type="button"
+      id="teacher-button"
+      onclick="teacherSetup()"
+      style="width:230px;"
+    >
+      New Game
+    </button>
+
+    <br />
+    <br />
+
+    <p style="margin-block-end: 0em; text-align: center; font-size: 10px">
+      Made by Sam Poder
+    </p>
+    
+  </div>
+
+  <script>
+    var teacher = false;
+    let vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+    document.getElementById("active").style.display = "none";
+    document.getElementById("buzz").disabled = true;
+    document.getElementById("unbuzz").disabled = true;
+    var x = document.getElementById("info-text");
+    var socket = io();
+    socket.on("connectToRoom", function(data) {
+      console.log(data);
+    });
+    socket.on("buzz", function(msg) {
+      if (teacher == true) {
+        document.getElementById("unbuzz").disabled = false;
+      }
+      console.log(msg);
+      document.getElementById("buzz").disabled = true;
+      document.getElementById("info-text").innerText = msg + " has buzzed.";
+    });
+    socket.on("unbuzz", function(msg) {
+      console.log(msg);
+      if (teacher == false) {
+        document.getElementById("buzz").disabled = false;
+      }
+      document.getElementById("unbuzz").disabled = true;
+      document.getElementById("info-text").innerText =
+        msg + " has disengaged the buzzer.";
+    });
+    socket.on("unbuzz", function(msg) {
+      console.log(msg);
+      if (teacher == false) {
+        document.getElementById("buzz").disabled = false;
+      }
+      document.getElementById("unbuzz").disabled = true;
+      document.getElementById("info-text").innerText =
+        msg + " has disengaged the buzzer.";
+    });
+
+    var connectedRoom = "none";
+
+    var username = "none";
+
+    function joinGame() {
+      connectedRoom = document.getElementById("room").value;
+      username = document.getElementById("name").value;
+      socket.emit("join-room", connectedRoom);
+      document.getElementById("buzz").disabled = true;
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("active").style.display = "block";
+    }
+
+    function teacherSetup() {
+      document.getElementById("buzz").innerText = "loading";
+      var request = new XMLHttpRequest();
+      var name = "unknown";
+      request.open("GET", "https://friendly-words.glitch.me/word-pairs", true);
+      request.onload = function() {
+        var data = JSON.parse(this.response);
+        name = data[0];
+        console.log(name);
+        socket.emit("join-room", name);
+        connectedRoom = name;
+        document.getElementById("buzz").innerText = name;
+        document.getElementById("buzz").style.color = "black";
+        document.getElementById("buzz").disabled = true;
+        document.getElementById("unbuzz").disabled = true;
+      };
+
+      request.send();
+      connectedRoom = document.getElementById("room").value;
+      username = "The teacher";
+      socket.emit("join-room", connectedRoom);
+      document.getElementById("buzz").disabled = true;
+      document.getElementById("unbuzz").disabled = true;
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("active").style.display = "block";
+      document.getElementById("info-text").innerText = "Join the game!";
+      document.getElementById("unbuzz").innerText = "Enable Buzzers";
+      teacher = true;
+      console.log(teacher);
+    }
+  </script>
+  <body></body>
+</html>
