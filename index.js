@@ -10,6 +10,10 @@ app.get("/", function(req, res) {
   res.sendfile("index.html");
 });
 
+io.on('connect', socket => {
+  console.log('connect');
+});
+
 io.on("connection", function(socket) {
   socket.on("buzz", function(msg) {
     io.sockets.in(msg[0]).emit("buzz", msg[1]);
