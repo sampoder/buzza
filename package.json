@@ -1,11 +1,8 @@
 {
-  "//1": "describes your app and its dependencies",
-  "//2": "https://docs.npmjs.com/files/package.json",
-  "//3": "updating this file will download and update your packages",
-  "name": "hello-express",
+  "name": "buzza",
   "version": "0.0.1",
-  "description": "A simple Node app built on Express, instantly up and running.",
-  "main": "server.js",
+  "description": "A buzzer app for Quiz Bowls made using Socket.io & Javascript.",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
@@ -17,12 +14,7 @@
     "node": "12.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/hello-express"
+    "url": "https://github.com/sampoder/buzza"
   },
   "license": "MIT",
-  "keywords": [
-    "node",
-    "glitch",
-    "express"
-  ]
 }
