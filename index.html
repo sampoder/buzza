@@ -35,59 +35,59 @@
 
   <div id ="everything">
 
-  <div id="active">
+    <div id="active">
 
-    <div id="info-panel" style="">
+      <div id="info-panel" style="">
 
-      <div id="info-text" style="  padding: 3.5vh">Welcome to the Game!</div>
+        <div id="info-text" style="  padding: 3.5vh">Welcome to the Game!</div>
+
+      </div>
+
+      <button
+        class="block"
+        id="buzz"
+        onclick="socket.emit('buzz', [connectedRoom, username]); document.getElementById('unbuzz').disabled = false; document.getElementById('buzz').disabled = true;"
+      >
+        Buzz
+      </button>
+
+      <button
+        class="block2"
+        id="unbuzz"
+        onclick="socket.emit('unbuzz', [connectedRoom, username]); "
+      >
+        Disengage Buzzer
+      </button>
 
     </div>
 
-    <button
-      class="block"
-      id="buzz"
-      onclick="socket.emit('buzz', [connectedRoom, username]); document.getElementById('unbuzz').disabled = false; document.getElementById('buzz').disabled = true;"
-    >
-      Buzz
-    </button>
-    
-    <button
-      class="block2"
-      id="unbuzz"
-      onclick="socket.emit('unbuzz', [connectedRoom, username]); "
-    >
-      Disengage Buzzer
-    </button>
+    <div id="setup">
 
-  </div>
+      <input type="text" id="name" placeholder="Username" />
+      <br>
+      <input type="text" id="room" placeholder="Room Name" />
+      <br>
+      <button
+        type="button"
+        class="start-button"
+        id="submit-button"
+        onclick="joinGame()"
+        style="width:230px;"
+      >
+        Join Game
+      </button>
+      <br>
+      <button
+        type="button"
+        class="start-button"
+        id="teacher-button"
+        onclick="teacherSetup()"
+        style="width:230px;"
+      >
+        New Game
+      </button>
 
-  <div id="setup">
-
-    <input type="text" id="name" placeholder="Username" />
-    <br>
-    <input type="text" id="room" placeholder="Room Name" />
-    <br>
-    <button
-      type="button"
-      class="start-button"
-      id="submit-button"
-      onclick="joinGame()"
-      style="width:230px;"
-    >
-      Join Game
-    </button>
-    <br>
-    <button
-      type="button"
-      class="start-button"
-      id="teacher-button"
-      onclick="teacherSetup()"
-      style="width:230px;"
-    >
-      New Game
-    </button>
-    
-  </div>
+    </div>
   </div>
 
 </html>
