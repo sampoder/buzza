@@ -1,10 +1,16 @@
 var app = require("express")();
 var http = require("http").Server(app);
-var io = require("socket.io")(http);
 var express = require('express');
 var path = require('path');
 var port = process.env.PORT;
 app.use(express.static(__dirname + '/public'));
+var server = app.listen(port, function () {
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log("Server is started at http://:%s:%s", host, port);
+});
+
+var io = require('socket.io').listen(server);
 
 app.get("/", function(req, res) {
   res.sendfile("index.html");
@@ -24,10 +30,4 @@ io.on("connection", function(socket) {
   socket.on("join-room", function(msg) {
     socket.join(msg);
   });
-});
-
-var server = app.listen(port, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log("Server is started at http://:%s:%s", host, port);
 });
